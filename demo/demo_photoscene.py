@@ -27,6 +27,7 @@ from mask_former import add_mask_former_config
 from predictor import VisualizationDemo
 
 import torch
+import random
 
 # constants
 WINDOW_NAME = "MaskFormer demo"
@@ -77,6 +78,11 @@ def get_parser():
         default=[],
         nargs=argparse.REMAINDER,
     )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=0
+    )
     return parser
 
 
@@ -100,6 +106,9 @@ def test_opencv_video_format(codec, file_ext):
 if __name__ == "__main__":
     mp.set_start_method("spawn", force=True)
     args = get_parser().parse_args()
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
     setup_logger(name="fvcore")
     logger = setup_logger()
     logger.info("Arguments: " + str(args))
